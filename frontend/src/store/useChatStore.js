@@ -72,7 +72,7 @@ export const useChatStore = create((set, get) => ({
 
   // Send message to current conversation room backend API
   sendMessage: async (messageData) => {
-    const { selectedConversation, messages, conversation } = get();
+    const { selectedConversation, messages, conversations } = get();
     if (!selectedConversation) return;
 
     try {

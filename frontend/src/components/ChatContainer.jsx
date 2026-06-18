@@ -6,7 +6,7 @@ import MessageInput from './MessageInput';
 import Message from './Message';
 
 const ChatContainer = () => {
-  const { messages, selectedConversation, isMessagesLoading, getMessages, subscribeToMessage, unsubscribeFromMessage } = useChatStore();
+  const { messages, selectedConversation, isMessagesLoading, getMessages, subscribeToMessages, unsubscribeFromMessages } = useChatStore();
   const { authUser, onlineUsers } = useAuthStore();
   const messageEndRef = useRef(null);
 
