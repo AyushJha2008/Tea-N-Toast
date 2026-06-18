@@ -16,7 +16,7 @@ export const useChatStore = create((set, get) => ({
   getUsers: async () => {
     set({ isUsersLoading: true });
     try {
-      const res = await api.get("/user"); // Matches your router.get("/", auth, getUsers)
+      const res = await api.get("/users"); // Matches your router.get("/", auth, getUsers)
       set({ users: res.data.users || res.data });
     } catch (error) {
       console.error("Error fetching users:", error);
@@ -25,7 +25,7 @@ export const useChatStore = create((set, get) => ({
     }
   },
 
-  // Fetch existing conversations for the user
+  // Fetch existing conversations
   getConversations: async () => {
     set({ isConversationsLoading: true });
     try {
@@ -35,6 +35,25 @@ export const useChatStore = create((set, get) => ({
       console.error("Error fetching conversations:", error);
     } finally {
       set({ isConversationsLoading: false });
+    }
+  },
+
+  //start convo
+  startConversation: async (partnerId) => {
+    try {
+      const res = await api.post("/convo/start", { participantId: partnerId });
+      const newConversation = res.data;
+
+      const existingConvo = get().conversations.find(c => c._id === newConversation._id);
+
+      if (!existingConvo) {
+        set({ conversations: [newConversation, ...get().conversations] });
+      }
+
+      set({ selectedConversation: newConversation });
+      get().getMessages(newConversation._id);
+    } catch (error) {
+      console.error("Error starting conversation:", error);
     }
   },
 
@@ -57,7 +76,6 @@ export const useChatStore = create((set, get) => ({
     if (!selectedConversation) return;
 
     try {
-      // route: /message/send/:id where :id is the conversation ID
       const res = await api.post(`/messages/send/${selectedConversation._id}`, messageData);
       const newMsg = res.data;
       set({ messages: [...messages, newMsg] });

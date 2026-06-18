@@ -86,6 +86,28 @@ export const useAuthStore = create((set, get) => ({
     }
   },
 
+  // Start or open a conversation with another user
+  startConversation: async (partnerId) => {
+    try {
+      // route: POST /api/v1/convo
+      const res = await api.post("/convo", { participantId: partnerId });
+      const newConversation = res.data;
+
+      const existingConvo = get().conversations.find(c => c._id === newConversation._id);
+
+      if (!existingConvo) {
+        // Append it to the top of the sidebar list if it's brand new
+        set({ conversations: [newConversation, ...get().conversations] });
+      }
+
+      // Automatically select the conversation to open the chat window
+      set({ selectedConversation: newConversation });
+      get().getMessages(newConversation._id);
+    } catch (error) {
+      console.error("Error starting conversation:", error);
+    }
+  },
+
   // Handles User Logout
   logout: async () => {
     try {

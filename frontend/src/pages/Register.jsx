@@ -9,7 +9,7 @@ const Register = () => {
   const isSigningUp = useAuthStore((state) => state.isSigningUp);
 
   const [formData, setFormData] = useState({
-    name: '',
+    username: '',
     email: '',
     password: '',
   });
@@ -25,7 +25,7 @@ const Register = () => {
     setError('');
 
     // Basic Validation
-    if (!formData.name || !formData.email || !formData.password) {
+    if (!formData.username || !formData.email || !formData.password) {
       setError('All fields are required.');
       return;
     }
@@ -57,8 +57,8 @@ const Register = () => {
             <label className="block text-sm font-medium text-slate-300 mb-1">Full Name</label>
             <input
               type="text"
-              name="name"
-              value={formData.name}
+              name="username"
+              value={formData.username}
               onChange={handleChange}
               disabled={isSigningUp}
               className="w-full px-4 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition disabled:opacity-50"

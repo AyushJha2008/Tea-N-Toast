@@ -39,11 +39,10 @@ export const getConversations = async (req, res) => {
     const conversations = await Convo.find({
       participants: req.user._id,
     })
-      .populate(
-        "participants",
-        "username profilePic email",
-        "-password"
-      )
+      .populate({
+        path: "participants",
+        select: "username profilePic email"
+      })
       .populate("lastMessage")
       .sort({ updatedAt: -1 });
 
